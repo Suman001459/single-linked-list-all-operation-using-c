@@ -1,0 +1,361 @@
+#include<stdio.h>
+#include<stdlib.h>
+void insertAtFirst(int);
+void insertAtEnd(int);
+void insertAfterNode(int,int);
+void insertAtPosition(int,int);
+void deleteFirstNode();
+void deleteLastNode();
+void Delete(int);
+int count();
+void search(int);
+void display();
+struct node
+{
+	int data;
+	struct node *link;
+};
+
+struct node *start=NULL;
+void create(int n)
+{
+	int i,a;
+	for(i=1;i<=n;i++)
+	{
+		printf("Enter the value %d :: ",i);
+		scanf("%d",&a);
+		insertAtEnd(a);
+	}
+}
+void insertAtFirst(int value) //insert at beging of the node 
+{
+	struct node *temp=(struct node *) malloc (sizeof(struct node *));
+	temp->data =value;
+	if(start==NULL)
+	{
+		temp->link=NULL;
+		start=temp;
+	}
+	else
+	{
+		temp->link=start;
+		start=temp;
+	}
+}
+void insertAtEnd(int value) //insert at end
+{
+	struct node *temp=(struct node*) malloc (sizeof(struct node *));
+	temp->data = value;
+	if(start==NULL)
+	{
+		temp->link = NULL;
+		start=temp;
+	}
+	else if(start->link == NULL)
+	{
+		temp->link=NULL;
+		start->link=temp;
+	}
+	else
+	{
+		struct node *p=start;
+		while(p->link!=NULL)
+		{
+			p=p->link;
+		}
+		temp->link=NULL;
+		p->link=temp;
+	}
+	
+}
+void insertAfterNode(int value,int D) //insert node after a node
+{
+
+	struct node *temp=(struct node*)malloc(sizeof(struct node*));
+	temp->data =value;
+	if(start==NULL)
+	{
+		printf("Linked list empty");
+	}
+	else if(start->data ==D)
+	{
+		temp->link=start->link;
+		start->link=temp;
+	}
+	else
+	{
+		struct node *p=start;
+		while(p->data!=D && p!=NULL)
+		{
+			p=p->link;
+		}
+		if(p==NULL)
+		{
+			printf("given data %d not found",D);
+		}
+		else
+		{
+			temp->link=p->link;
+			p->link=temp;
+		}
+	}
+}
+void insertAtPosition(int value,int pos) //insertting node at a position
+{
+	printf("Enter the position of node where you want to add the NEW NODE ::  ");
+	scanf("%d",&pos);
+	struct node *temp = (struct node*) malloc (sizeof(struct node));
+	temp->data=value;
+	struct node *p=start;
+	if(start==NULL)
+	{
+		printf("Linked list is Empty");
+	}
+	else if(pos==1)
+	{
+		insertAtFirst(value);
+	}
+	else
+	{
+		struct node*p=start;
+		int i;
+		for(i=1;i<pos-1;i++)
+		{
+			p=p->link;
+		}
+		temp->link=p->link;
+		p->link=temp;
+	}
+}
+void deleteFirstNode() //deleting first node
+{
+	struct node *p;
+	p=start;
+	if(start==NULL)
+	{
+		printf("Empty! Nothing to delete.");
+	}
+	else if(start->link==NULL)
+	{
+		start=NULL;
+		free(p);
+	}
+	else
+	{
+		start=start->link;
+		free(p);
+		printf("First node Deleted sucessfully!");
+	}
+}
+void deleteLastNode() //deleting last node.
+{
+	struct node *p=start;
+	if(start==NULL)
+	{
+		printf("Empty! Nothing to delete.");
+	}
+	else if(start->link==NULL)
+	{
+		start==NULL;
+		free(p);
+		printf("Deleted sucessfully!");
+	}
+	else
+	{
+		struct node *temp=start;
+		while(temp->link->link!=NULL)
+		{
+			temp=temp->link;
+		}
+		p=temp->link;
+		temp->link=NULL;
+		free(p);
+		printf("Last node Deleted sucessfully!");
+	}
+}
+void Delete(int value) //delete any node
+{
+	if(start==NULL)
+	{
+		printf("Empty! Nothing to Delete.");
+	}
+	else if(start->data==value)
+	{
+		deleteFirstNode();
+	}
+	else
+	{
+		struct node *p=start;
+		struct node *q=start->link;
+		while(q->link!=NULL)
+		{
+			if(q->data==value)
+			{
+				p->link=q->link;
+				free(q);
+				return;
+			}
+			p=p->link;
+			q=q->link;
+		}
+		if(q->data==value)
+		{
+			deleteLastNode();
+			return;
+		}
+		printf("Data not found!");
+	}
+}
+int count() //counting node
+{
+	if(start == NULL)
+	{
+		return 0;
+	}
+	else if (start->link==NULL)
+	{
+		return 1;
+	}
+	else
+	{
+		int count=0;
+	    struct node *p=start;
+		while(p!=NULL)
+		{
+			count++;
+			p=p->link;	
+		}
+		return count;
+	}
+}
+void search(int value) //Searching of a node
+{
+	int D=value;
+	if(start==NULL)
+	{
+		printf("Linked list is Empty");
+	}
+	else
+	{
+		struct node *p=start->link;
+		int count=1;
+		while(p!=NULL)
+		{
+			count++;
+			if(p->data==D)
+			{
+				printf("Found at position %d",count);
+				return;
+			}
+			p=p->link;
+		}
+		printf("Search Element not found");
+	}
+}
+void display() // Displaying final node
+{
+	printf("\n\n\n");
+	if(start==NULL)
+	{
+		printf("NULL");
+	}
+	else
+	{
+		struct node *p=start;
+		printf("Linked list is---\n");
+		while(p!=NULL)
+		{
+			printf("%d--->",p->data);
+			p=p->link;
+		}
+		printf("NULL\n");
+	}
+}
+int main()
+{
+	int choice,value,D,nv,pos,a,n;
+	printf("Enter the no. of Nodes to create :: ");
+	scanf("%d",&n);
+	create(n);
+	while(1)
+	{
+		printf("\n");
+		printf(".....:Enter a choice from the menu:..... ");
+		printf("\nPress 1 to insert at Begining.");
+		printf("\nPress 2 to insert at End.");
+		printf("\nPress 3 to insert After a Node.");
+		printf("\nPress 4 to insert At a Position.");
+		printf("\nPress 5 to delete first node.");
+		printf("\nPress 6 to delete last node.");
+		printf("\nPress 7 to delete at a positon");
+		printf("\nPress 8 to Count the Nodes.");
+		printf("\nPress 9 to Search a Node.");
+	//	printf("\nPress 9 to Count the Nodes.");
+		printf("\nPress 10 to Display.");
+		printf("\npress 0 to Exit.");
+		//printf("\n......................................");
+		printf("\n\n");
+		scanf("%d",&choice);
+		switch(choice)
+		{
+			case 1:
+				{
+					printf("Enter the value:: ");
+					scanf("%d",&value);
+					insertAtFirst(value);
+				 	break;
+				}
+				
+			case 2:
+				{
+					printf("Enter the value:: ");
+					scanf("%d",&value);
+					insertAtEnd(value);
+					break;
+				}
+			case 3:
+				printf("Enter the value:: ");
+				scanf("%d",&value);
+				printf("After which node do you want to add New node?? ::");
+				scanf("%d",&D);
+				insertAfterNode(value,D);
+				break;
+			case 4:
+				printf("Enter the value:: ");
+				scanf("%d",&value);
+				insertAtPosition(value,pos);
+				break;
+			case 5:
+				deleteFirstNode();
+				break;
+			case 6:
+				deleteLastNode();
+				break;
+			case 7:
+				printf("Enter node value to delete.");
+				scanf("%d",&nv);
+				Delete(nv);
+				break;
+			case 8:
+				a=count();
+				printf("No. of node :: %d",a);
+				break;
+			case 9:
+				printf("Enter the value:: ");
+				scanf("%d",&value);
+				search(value);
+				break;
+			case 10:
+				display();
+				break;
+			case 0:
+				exit(0);
+				break;
+			default:
+				printf("Please enter a valid input.");
+		}		
+	}
+	
+	return 0;
+}
+
